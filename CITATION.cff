@@ -10,8 +10,8 @@ title: "The GDPR Constellation: a compliance star map"
 message: "If you use this work, please cite it."
 type: software
 authors:
-  - family-names: "Villa"
-    given-names: "Fernanda S."
+  - family-names: "Sanchez-Villa"
+    given-names: "Maria Fernanda"
     # orcid: "https://orcid.org/0000-0000-0000-0000"
 repository-code: "https://github.com/FernandaSVilla/GDPR-knowledge-constellation"
 url: "https://fernandasvilla.github.io/GDPR-knowledge-constellation/"
@@ -37,8 +37,8 @@ keywords:
 license: CC-BY-4.0
 version: "1.0.0"
 date-released: "2026-08-10"
-# doi: "10.5281/zenodo.XXXXXXX"
-# identifiers:
-#   - type: doi
-#     value: "10.5281/zenodo.XXXXXXX"
-#     description: "Concept DOI, always resolves to the latest version"
+doi: "10.5281/zenodo.21872518"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.21872518"
+    description: "Concept DOI, always resolves to the latest version"
