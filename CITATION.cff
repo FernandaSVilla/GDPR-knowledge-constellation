@@ -1,0 +1,44 @@
+# This file makes GitHub show a "Cite this repository" button in the sidebar,
+# and Zenodo reads it when it archives a release.
+#
+# After Zenodo gives you a DOI, uncomment the `doi:` lines below and paste it in.
+# Use the concept DOI, the one Zenodo says always resolves to the latest version,
+# not the version-specific one.
+
+cff-version: 1.2.0
+title: "The GDPR Constellation: a compliance star map"
+message: "If you use this work, please cite it."
+type: software
+authors:
+  - family-names: "Villa"
+    given-names: "Fernanda S."
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+repository-code: "https://github.com/FernandaSVilla/GDPR-knowledge-constellation"
+url: "https://fernandasvilla.github.io/GDPR-knowledge-constellation/"
+abstract: >
+  An interactive self-assessment tool covering 45 practical obligations under
+  Regulation (EU) 2016/679, arranged as nine constellations from lawful basis to
+  international transfers. Each obligation is cited to paragraph level, tagged by
+  source (regulation text, CJEU case law or supervisory guidance), and mapped to
+  the evidence a supervisory authority would expect together with its statutory
+  maximum tier under Art. 83. Users assess their position, the tool computes
+  maturity by domain, flags open 4 per cent tier exposure, and exports a
+  prioritised gap report. Includes a study mode with recall questions. Built as a
+  single self-contained HTML page with no backend; assessment data stays in the
+  browser.
+keywords:
+  - GDPR
+  - data protection
+  - privacy
+  - regulatory compliance
+  - self-assessment
+  - legal design
+  - compliance maturity
+license: CC-BY-4.0
+version: "1.0.0"
+date-released: "2026-08-10"
+# doi: "10.5281/zenodo.XXXXXXX"
+# identifiers:
+#   - type: doi
+#     value: "10.5281/zenodo.XXXXXXX"
+#     description: "Concept DOI, always resolves to the latest version"

@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The GDPR Constellation, a compliance star map</title>
+<meta name="description" content="45 GDPR obligations arranged as constellations. Self-assessment lights each star, computes maturity by area, flags open 4%-tier exposure, and exports a prioritised gap report.">
+<meta name="author" content="Fernanda S. Villa">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AI &amp; Data Governance Maps, Fernanda S. Villa">
+<meta property="og:title" content="The GDPR Constellation, a compliance star map">
+<meta property="og:description" content="45 GDPR obligations arranged as constellations. Self-assessment lights each star, computes maturity by area, flags open 4%-tier exposure, and exports a prioritised gap report.">
+<meta property="og:url" content="https://fernandasvilla.github.io/GDPR-knowledge-constellation/">
+<meta property="og:image" content="https://fernandasvilla.github.io/GDPR-knowledge-constellation/og-gdpr.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The GDPR Constellation, a compliance star map">
+<meta name="twitter:description" content="45 GDPR obligations arranged as constellations. Self-assessment lights each star, computes maturity by area, flags open 4%-tier exposure, and exports a prioritised gap report.">
+<meta name="twitter:image" content="https://fernandasvilla.github.io/GDPR-knowledge-constellation/og-gdpr.png">
+
+<style>
+:root{
+  color-scheme: dark;
+  --void:#070b18;
+  --void-2:#0d1428;
+  --panel:rgba(15,23,45,.86);
+  --line:rgba(120,160,220,.16);
+  --line-2:rgba(120,160,220,.28);
+  --ink:#e8eefb;
+  --ink-2:#a9b8d6;
+  --muted:#64769b;
+  --gold:#f0c674;
+  --cyan:#5fd4e8;
+  --violet:#a78bfa;
+  --rose:#f472b6;
+  --green:#4ade80;
+  --red:#fb7185;
+  --mono: ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+  --serif: "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%}
+body{
+  background:
+    radial-gradient(ellipse 90% 60% at 20% 0%, #142046 0%, transparent 60%),
+    radial-gradient(ellipse 80% 70% at 85% 100%, #1a1440 0%, transparent 62%),
+    linear-gradient(170deg,#070b18 0%,#0a1024 50%,#060912 100%);
+  color:var(--ink);font-family:var(--sans);font-size:14px;overflow:hidden;
+}
+#app{display:flex;flex-direction:column;height:100vh;min-height:660px}
+
+/* ---------------- header ---------------- */
+header{padding:12px 20px 11px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;flex-wrap:wrap;backdrop-filter:blur(6px)}
+h1{
+  margin:0;font-family:var(--serif);font-size:20px;font-weight:500;letter-spacing:.02em;
+  display:flex;align-items:center;gap:10px;
+}
+h1 .star{color:var(--gold);font-size:15px;text-shadow:0 0 12px rgba(240,198,116,.8)}
+h1 em{font-style:normal;color:var(--gold)}
+.sub{margin:2px 0 0 25px;font-size:10.5px;font-family:var(--mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.tools{margin-left:auto;display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+
+.btn{
+  appearance:none;border:1px solid var(--line-2);background:rgba(255,255,255,.03);color:var(--ink-2);
+  padding:6px 12px;border-radius:20px;cursor:pointer;font-size:11px;font-weight:600;
+  font-family:var(--mono);letter-spacing:.05em;white-space:nowrap;transition:.15s;
+}
+.btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(240,198,116,.07)}
+.btn.on{background:var(--gold);border-color:var(--gold);color:#1a1200}
+.btn.on:hover{color:#1a1200}
+
+/* ---------------- score bar ---------------- */
+#scorebar{
+  display:flex;align-items:center;gap:16px;padding:9px 20px;border-bottom:1px solid var(--line);
+  background:rgba(8,13,28,.5);flex-wrap:wrap;
+}
+.score-main{display:flex;align-items:center;gap:11px}
+.ring{position:relative;width:44px;height:44px;flex:0 0 44px}
+.ring svg{transform:rotate(-90deg)}
+.ring .val{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:12px;font-weight:700;color:var(--gold);
+}
+.score-txt b{display:block;font-size:11px;font-family:var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+.score-txt span{font-size:10.5px;color:var(--muted);font-family:var(--mono)}
+.crit{
+  margin-left:auto;display:flex;align-items:center;gap:8px;font-size:11px;font-family:var(--mono);
+  color:var(--red);border:1px solid rgba(251,113,133,.3);background:rgba(251,113,133,.08);
+  padding:5px 12px;border-radius:20px;
+}
+.crit.ok{color:var(--green);border-color:rgba(74,222,128,.3);background:rgba(74,222,128,.08)}
+
+/* ---------------- body ---------------- */
+#body{flex:1;display:flex;min-height:0}
+
+#sky-wrap{flex:1;position:relative;overflow:hidden;min-width:0;display:flex;flex-direction:column}
+svg#sky{width:100%;flex:1;min-height:0;display:block;cursor:crosshair}
+
+.bgstar{fill:#dce6ff}
+@keyframes tw{0%,100%{opacity:.18}50%{opacity:.75}}
+
+.cline{stroke:rgba(150,190,255,.24);stroke-width:1px;stroke-dasharray:2 4}
+.cgroup.active .cline{stroke:rgba(240,198,116,.5);stroke-dasharray:none}
+
+.cname{
+  font-family:var(--serif);font-size:15px;fill:rgba(190,210,255,.5);
+  letter-spacing:.32em;text-transform:uppercase;pointer-events:none;
+  paint-order:stroke;stroke:#080d1c;stroke-width:5px;stroke-linejoin:round;
+}
+.csub{font-family:var(--mono);font-size:9px;fill:rgba(155,180,225,.45);letter-spacing:.12em;pointer-events:none;
+  paint-order:stroke;stroke:#080d1c;stroke-width:4px;stroke-linejoin:round}
+.cgroup.active .cname{fill:var(--gold)}
+
+.star-g{cursor:pointer}
+.star-core{transition:.25s}
+.star-glow{opacity:.3;transition:.25s}
+.star-hit{fill:transparent}
+.star-g:hover .star-core{filter:brightness(1.5)}
+.star-lbl{
+  font-family:var(--mono);font-size:10px;fill:rgba(208,222,250,.75);
+  pointer-events:none;letter-spacing:.02em;
+}
+.star-g.sel .star-lbl{fill:var(--gold);font-weight:700}
+.star-g.sel .star-core{stroke:var(--gold);stroke-width:1.4px}
+
+.st-none  .star-core{fill:#4a5878} .st-none  .star-glow{opacity:.05}
+.st-wip   .star-core{fill:#7dd3fc} .st-wip   .star-glow{opacity:.32;fill:#7dd3fc}
+.st-done  .star-core{fill:#fff8e6} .st-done  .star-glow{opacity:.68;fill:#ffe9a8}
+.st-na    .star-core{fill:#2b3350} .st-na    .star-glow{opacity:0}
+.st-na .star-lbl{fill:rgba(140,155,185,.3)}
+
+.tier4 .star-core{}
+#legend{
+  flex:0 0 auto;display:flex;gap:18px;flex-wrap:wrap;justify-content:center;
+  font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.05em;
+  background:rgba(7,11,24,.45);padding:7px 14px;border-top:1px solid var(--line);
+}
+#legend i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle}
+
+/* ---------------- panel ---------------- */
+#panel{
+  width:352px;flex:0 0 352px;border-left:1px solid var(--line);
+  background:var(--panel);backdrop-filter:blur(14px);overflow-y:auto;display:none;
+}
+#panel.open{display:block}
+.pwrap{padding:18px 20px 30px}
+#pclose{float:right;background:none;border:none;color:var(--muted);font-size:15px;cursor:pointer}
+#pclose:hover{color:var(--ink)}
+.pconst{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+#panel h3{font-family:var(--serif);font-size:18px;font-weight:500;margin:8px 0 8px;line-height:1.3}
+.pmeta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:15px}
+.pill{
+  font-family:var(--mono);font-size:9px;letter-spacing:.06em;padding:3px 9px;border-radius:20px;
+  border:1px solid var(--line-2);color:var(--ink-2);background:rgba(255,255,255,.03);
+}
+.pill.art{color:var(--cyan);border-color:rgba(95,212,232,.35)}
+.pill.t4{color:var(--red);border-color:rgba(251,113,133,.35);background:rgba(251,113,133,.07)}
+.pill.t2{color:var(--gold);border-color:rgba(240,198,116,.35);background:rgba(240,198,116,.07)}
+.pblock{margin-bottom:16px}
+.pblock h4{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 7px}
+.pblock p{margin:0;font-size:12.5px;line-height:1.62;color:var(--ink-2)}
+.evidence{
+  font-size:12px;line-height:1.55;color:var(--ink);background:rgba(95,212,232,.06);
+  border-left:2px solid var(--cyan);padding:9px 12px;border-radius:0 7px 7px 0;
+}
+.states{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.sbtn{
+  appearance:none;border:1px solid var(--line-2);background:rgba(255,255,255,.02);color:var(--ink-2);
+  padding:8px 6px;border-radius:8px;cursor:pointer;font-family:var(--mono);font-size:10px;
+  letter-spacing:.04em;transition:.15s;
+}
+.sbtn:hover{border-color:var(--ink-2);color:var(--ink)}
+.sbtn.on{background:var(--gold);border-color:var(--gold);color:#1a1200;font-weight:700}
+.sbtn.on[data-s="none"]{background:#4a5878;border-color:#4a5878;color:#dce6ff}
+.sbtn.on[data-s="wip"]{background:#7dd3fc;border-color:#7dd3fc;color:#04283a}
+.sbtn.on[data-s="na"]{background:#2b3350;border-color:#3d4870;color:#8c9bb9}
+
+/* study mode */
+.quiz{border:1px solid rgba(167,139,250,.35);background:rgba(167,139,250,.07);border-radius:10px;padding:13px}
+.quiz .q{font-size:13px;line-height:1.55;color:var(--ink);margin:0 0 11px}
+.quiz .a{font-size:12.5px;line-height:1.6;color:var(--ink-2);margin:0;display:none;border-top:1px solid rgba(167,139,250,.25);padding-top:10px}
+.quiz.revealed .a{display:block}
+.quiz .row{display:flex;gap:6px;margin-top:10px}
+.quiz .row .btn{flex:1;text-align:center}
+.qstat{font-family:var(--mono);font-size:9.5px;color:var(--muted);letter-spacing:.06em;margin-top:9px}
+
+.psrc{display:inline-flex;gap:6px;align-items:center;font-family:var(--mono);font-size:11px;color:var(--cyan);text-decoration:none;border-bottom:1px dotted rgba(95,212,232,.4);padding-bottom:1px}
+.psrc:hover{color:var(--ink)}
+
+/* ---------------- modal ---------------- */
+.modal{position:fixed;inset:0;background:rgba(3,6,15,.8);display:none;align-items:center;justify-content:center;z-index:60;backdrop-filter:blur(4px)}
+.modal.on{display:flex}
+.card{
+  background:#0c1327;border:1px solid var(--line-2);border-radius:14px;padding:20px;
+  width:min(760px,92vw);max-height:86vh;display:flex;flex-direction:column;
+}
+.card h4{margin:0 0 12px;font-family:var(--serif);font-size:17px;font-weight:500}
+.card textarea{
+  flex:1;min-height:320px;background:#070c1a;color:var(--ink-2);border:1px solid var(--line);
+  border-radius:9px;padding:12px;font-family:var(--mono);font-size:10.5px;line-height:1.5;resize:vertical;
+}
+.card .row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+.fmt{display:flex;gap:6px;margin-bottom:10px}
+
+footer{
+  padding:6px 20px;border-top:1px solid var(--line);font-family:var(--mono);
+  font-size:9px;color:var(--muted);text-align:center;letter-spacing:.03em;
+}
+.pill.kind-text{color:var(--ink-2)}
+.pill.kind-caselaw{color:var(--violet);border-color:rgba(167,139,250,.4);background:rgba(167,139,250,.08)}
+.pill.kind-guidance{color:var(--green);border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.07)}
+.tierbox{
+  border:1px solid var(--line-2);border-radius:9px;padding:11px 13px;background:rgba(255,255,255,.02);
+}
+.tierbox .cap{font-family:var(--mono);font-size:12px;font-weight:700;margin-bottom:5px}
+.tierbox.t4 .cap{color:var(--red)} .tierbox.t2 .cap{color:var(--gold)}
+.tierbox .caveat{font-size:11px;line-height:1.55;color:var(--muted);margin:7px 0 0;font-style:italic}
+ul.exlist{margin:0;padding:0 0 0 15px;font-size:12px;line-height:1.6;color:var(--ink-2)}
+ul.exlist li{margin-bottom:4px}
+.opfields{display:grid;grid-template-columns:1fr;gap:9px}
+.opfield label{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.opfield input{
+  width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line-2);color:var(--ink);
+  border-radius:7px;padding:7px 9px;font-family:var(--sans);font-size:12px;
+}
+.opfield input:focus{outline:none;border-color:var(--gold)}
+.opfield .ro{font-size:12px;color:var(--ink-2);line-height:1.5}
+#btn-about{}
+.aboutbody{overflow-y:auto;font-size:13px;line-height:1.7;color:var(--ink-2)}
+.aboutbody h5{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin:20px 0 7px}
+.aboutbody h5:first-child{margin-top:0}
+.aboutbody p{margin:0 0 10px}
+.aboutbody b{color:var(--ink)}
+#skyzoom{position:absolute;top:12px;right:14px;display:flex;flex-direction:column;gap:5px;z-index:5}
+#skyzoom button{
+  width:29px;height:29px;border-radius:9px;border:1px solid var(--line-2);
+  background:rgba(12,19,39,.82);color:var(--ink-2);cursor:pointer;font-size:14px;line-height:1;
+  font-family:var(--mono);backdrop-filter:blur(6px);transition:.15s;
+}
+#skyzoom button:hover{border-color:var(--gold);color:var(--gold)}
+#zlevel{
+  position:absolute;top:12px;right:52px;font-family:var(--mono);font-size:9.5px;color:var(--muted);
+  background:rgba(12,19,39,.75);border:1px solid var(--line);border-radius:20px;padding:4px 10px;
+  z-index:5;opacity:0;transition:opacity .3s;pointer-events:none;
+}
+#zlevel.show{opacity:1}
+svg#sky.panning{cursor:grabbing}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(120,160,220,.2);border-radius:9px}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header>
+    <div>
+      <h1><span class="star">✦</span>The GDPR <em>Constellation</em></h1>
+      <div class="sub">Practical compliance routes · Regulation (EU) 2016/679</div>
+    </div>
+    <div class="tools">
+      <button class="btn" id="btn-about">ⓘ About &amp; method</button>
+      <button class="btn" id="btn-study">◐ Study mode</button>
+      <button class="btn" id="btn-report">↓ Gap report</button>
+      <button class="btn" id="btn-reset">↺ Reset</button>
+    </div>
+  </header>
+
+  <div id="scorebar">
+    <div class="score-main">
+      <div class="ring">
+        <svg width="44" height="44">
+          <circle cx="22" cy="22" r="18" fill="none" stroke="rgba(120,160,220,.18)" stroke-width="4"/>
+          <circle id="ring-arc" cx="22" cy="22" r="18" fill="none" stroke="#f0c674" stroke-width="4"
+                  stroke-linecap="round" stroke-dasharray="113" stroke-dashoffset="113"/>
+        </svg>
+        <div class="val" id="ring-val">0%</div>
+      </div>
+      <div class="score-txt">
+        <b>Maturity</b>
+        <span id="score-detail">nothing assessed yet</span>
+      </div>
+    </div>
+    <div id="constscores" style="display:flex;gap:5px;flex-wrap:wrap"></div>
+    <div class="crit" id="crit">- critical gaps</div>
+  </div>
+
+  <div id="body">
+    <div id="sky-wrap">
+      <svg id="sky"></svg>
+      <div id="skyzoom">
+        <button id="z-in" title="Zoom in">+</button>
+        <button id="z-out" title="Zoom out">−</button>
+        <button id="z-fit" title="Fit to screen">⤢</button>
+      </div>
+      <div id="zlevel">100%</div>
+      <div id="legend">
+        <span><i style="background:#fff8e6;box-shadow:0 0 7px #ffe9a8"></i>Implemented</span>
+        <span><i style="background:#7dd3fc"></i>In progress</span>
+        <span><i style="background:#4a5878"></i>Not started</span>
+        <span><i style="background:#2b3350"></i>Not applicable</span>
+        <span style="color:var(--red)">◆ 4% tier</span>
+        <span style="color:var(--gold)">◆ 2% tier</span>
+        <span>scroll to zoom · drag to pan · press 0 to reset</span>
+      </div>
+    </div>
+
+    <aside id="panel"><div class="pwrap"><button id="pclose">✕</button><div id="pbody"></div></div></aside>
+  </div>
+
+  <footer id="foot">AI-assisted · Content curated from official sources · standards and case law evolve, verify before citing · made by Fernanda S. Villa, August 2026</footer>
+</div>
+
+<div class="modal" id="about"><div class="card">
+  <h4>About &amp; method</h4>
+  <div class="aboutbody">
+    <h5>What this is</h5>
+    <p>A working map of the obligations an organisation has to satisfy under Regulation (EU) 2016/679,
+       arranged so that the shape of a compliance programme is visible at a glance. It is an orientation
+       and self-assessment tool: <b>not legal advice</b>, and not a substitute for a qualified assessment
+       of your own processing.</p>
+
+    <h5>How to read the fine tiers</h5>
+    <p>Each obligation is tagged <b>2%</b> or <b>4%</b>. This is the <b>statutory maximum category</b> that
+       Article 83(4) or 83(5) assigns to that type of infringement, nothing more. It is <b>not an estimate
+       of any fine</b>. Actual amounts are set case by case against the eleven criteria in Article 83(2):
+       nature, gravity and duration, intent or negligence, mitigation, prior infringements, degree of
+       cooperation, and the rest. Most enforcement lands far below the ceiling. The tier is here to help
+       you <i>prioritise</i>, not to predict an outcome.</p>
+
+    <h5>Regulation text vs. supervisory expectation</h5>
+    <p>Not everything a supervisory authority expects is written in the Regulation. Every obligation is
+       therefore tagged by source:</p>
+    <p><b>Regulation text</b>: an express requirement in the articles cited.<br>
+       <b>CJEU case law</b>: an obligation established by the Court, not by the text alone.<br>
+       <b>Supervisory guidance</b>: a structured practice expected by the EDPB or its predecessor, derived
+       from a recital or from a general duty rather than stated as a discrete requirement.</p>
+    <p>The distinction matters: guidance-derived items are strongly advisable and are what regulators look
+       for, but they are not the same legal animal as an express article, and should not be presented as
+       though they were.</p>
+
+    <h5>Citations</h5>
+    <p>Each obligation cites the specific provision down to paragraph and sub-paragraph where one exists,
+       plus the relevant recital or guidance document. Verify against the consolidated text on EUR-Lex and
+       the current EDPB guidelines before relying on anything here, guidance is revised, and the Digital
+       Omnibus has amendments to the GDPR in negotiation.</p>
+
+    <h5>Your data</h5>
+    <p>Your self-assessment, owner names and study progress are stored only in this browser's local storage.
+       Nothing is transmitted anywhere, there is no account and no backend. Clearing your browser data
+       clears your progress.</p>
+
+    <h5>Attribution</h5>
+    <p>AI-assisted. Curated from Regulation (EU) 2016/679 and supervisory guidance.
+       Made by <b>Fernanda S. Villa</b>, August 2026.</p>
+  </div>
+  <div class="row"><button class="btn" id="about-close">Close</button></div>
+</div></div>
+<div class="modal" id="modal"><div class="card">
+  <h4 id="modal-title">Gap report</h4>
+  <div class="fmt">
+    <button class="btn on" id="fmt-md">Markdown</button>
+    <button class="btn" id="fmt-csv">CSV</button>
+  </div>
+  <textarea id="modal-text" readonly></textarea>
+  <div class="row">
+    <button class="btn" id="m-copy">Copy</button>
+    <button class="btn" id="m-dl">Download</button>
+    <button class="btn" id="m-close">Close</button>
+  </div>
+</div></div>
+
+<script>
+(function(){
+"use strict";
+
+/* =================================================== DATA =================================================== */
+const T4 = "Up to €20m or 4% of global annual turnover, Art. 83(5)";
+const T2 = "Up to €10m or 2% of global annual turnover, Art. 83(4)";
+
+const CONSTELLATIONS = [
+  {
+    id:"licentia", name:"Licentia", sub:"Lawful basis", cx:240, cy:150, color:"#f0c674",
+    lines:[[0,1],[1,2],[2,3],[3,4],[4,0]],
+    stars:[
+      {dx:-72,dy:-42,mag:3,id:"basis-register",name:"Lawful basis register",art:"Art. 6(1)(a)–(f)",tier:4,kind:"text",freq:"Annual, and whenever a new purpose is added",ex:["Processing inventory with a lawful-basis column per purpose", "Decision memo for any contested or borderline basis", "Version history showing when a basis was set"],
+       what:"Every processing activity must be tied to one of the six lawful bases before it starts, and the basis cannot be swapped later to rescue a failing one. Map basis to purpose, not to dataset.",
+       evidence:"A table listing each processing purpose with its lawful basis and the reasoning behind the choice.",
+       q:"Can you change the lawful basis for a processing activity once it has begun?",
+       a:"As a rule, no. The basis must be identified before processing and communicated in the privacy notice. Switching mid-stream (for example from consent to legitimate interests after a consent rate disappoints) is treated as unfair processing and undermines transparency."},
+      {dx:28,dy:-72,mag:3,id:"consent",name:"Valid, revocable consent",art:"Art. 7(1)–(4) · Rec. 32, 42, 43",tier:4,kind:"text",freq:"Annual, plus on every consent-UI change",ex:["Consent management platform export with timestamp, scope and UI version", "Screenshots of each consent screen as shipped", "Withdrawal audit trail showing the request and the downstream stop"],
+       what:"Consent must be freely given, specific, informed and unambiguous, by a clear affirmative act. Pre-ticked boxes, bundled consent and silence do not qualify. Withdrawal must be as easy as giving it.",
+       evidence:"Consent logs recording what was shown, when, by whom, and the withdrawal mechanism.",
+       q:"What makes consent invalid even when the user clicked 'I agree'?",
+       a:"Any imbalance of power (employer–employee), bundling consent with contract acceptance, pre-ticked boxes, or making a service conditional on consent that is not necessary for it. Withdrawal must also be as easy as the original opt-in."},
+      {dx:88,dy:12,mag:2,id:"special",name:"Special category conditions",art:"Art. 9(1), 9(2)(a)–(j)",tier:4,kind:"text",freq:"Annual",ex:["Register of special-category processing with the Art. 9(2) condition cited", "Reference to the national-law provision where one is required", "Additional safeguards applied (access restriction, encryption)"],
+       what:"Health, biometric, genetic, racial or ethnic origin, political opinions, religion, union membership and sex-life data are prohibited by default. You need a lawful basis under Art. 6 AND a separate condition under Art. 9(2).",
+       evidence:"Documented Art. 9(2) condition for each special-category processing, plus any national-law derogation relied on.",
+       q:"Is a lawful basis under Article 6 enough to process health data?",
+       a:"No. Special category data requires two things stacked: an Art. 6 lawful basis and an Art. 9(2) condition, explicit consent, employment/social security law, vital interests, public health, and so on. Many Art. 9(2) conditions also require a basis in Member State law."},
+      {dx:18,dy:66,mag:2,id:"lia",name:"Legitimate interests assessment",art:"Art. 6(1)(f) · Rec. 47 · EDPB structured LIA test",tier:4,kind:"guidance",freq:"Annual, or when the processing changes",ex:["Written LIA per activity covering purpose, necessity and balancing", "Record of reasonable-expectations analysis", "List of mitigations applied and their effect on the balance"],
+       what:"The most flexible basis is also the one you must justify. Run the three-part test: is the interest legitimate, is the processing necessary, and does it override the individual's rights and reasonable expectations?",
+       evidence:"A written LIA per activity, with the balancing reasoning and any mitigations applied.",
+       q:"What are the three limbs of the legitimate interests test?",
+       a:"Purpose (is there a legitimate interest?), necessity (is the processing actually needed to achieve it, with no less intrusive route?), and balancing (does the individual's interest, right or freedom override it, considering their reasonable expectations?)."},
+      {dx:-78,dy:30,mag:2,id:"compat",name:"Purpose compatibility test",art:"Art. 6(4)(a)–(e)",tier:4,kind:"text",freq:"Per new or secondary purpose",ex:["Compatibility assessment for each secondary use", "Analytics and model-training use cases assessed separately", "Note of safeguards (pseudonymisation, aggregation) relied on"],
+       what:"Reusing data for a new purpose requires either a fresh lawful basis or a demonstration that the new purpose is compatible with the original, judged on context, link between purposes, data nature, consequences and safeguards.",
+       evidence:"Compatibility assessments for each secondary use, especially analytics and model training.",
+       q:"What factors decide whether a new purpose is 'compatible' with the original?",
+       a:"Article 6(4) lists five: the link between purposes, the context of collection and the relationship with the individual, the nature of the data (special categories weigh heavily), possible consequences, and the existence of safeguards such as encryption or pseudonymisation."}
+    ]
+  },
+  {
+    id:"transparentia", name:"Transparentia", sub:"Notice & fairness", cx:660, cy:150, color:"#5fd4e8",
+    lines:[[2,0],[2,1],[2,3]],
+    stars:[
+      {dx:-86,dy:-28,mag:3,id:"notice-direct",name:"Notice, data from the person",art:"Art. 13(1)(a)–(f), 13(2)(a)–(f), 13(3)",tier:4,kind:"text",freq:"Annual, plus on any processing change",ex:["Current privacy notice mapped clause-by-clause to Art. 13", "Screenshot of the notice at each collection point", "Change log showing when and why the notice was updated"],
+       what:"When you collect data directly, the notice must be given at the moment of collection and cover identity, purposes, lawful basis, legitimate interests, recipients, transfers, retention, rights, withdrawal, complaint route and any automated decision-making.",
+       evidence:"A current privacy notice mapped article-by-article against the Art. 13 checklist.",
+       q:"When must an Article 13 notice be provided?",
+       a:"At the time the data is obtained, not afterwards. If you later intend a new purpose, you must inform the person before that further processing begins."},
+      {dx:78,dy:-38,mag:2,id:"notice-indirect",name:"Notice, data from elsewhere",art:"Art. 14(1)(a)–(f), 14(2)(a)–(g), 14(5)(a)–(d)",tier:4,kind:"text",freq:"Annual, plus per new data source",ex:["Source register naming every third-party or public origin", "Proof of notification within one month, or the Art. 14(5) exemption relied on", "Copy of the notice actually sent"],
+       what:"Data obtained from third parties, public sources or scraping triggers a heavier duty: you must also disclose the categories of data and the source, within a reasonable period and at most one month.",
+       evidence:"Source register plus proof of notification, or a documented Art. 14(5) exemption.",
+       q:"What extra information does Article 14 require that Article 13 does not?",
+       a:"The categories of personal data concerned and the source they came from, including whether it came from publicly accessible sources. The notice must arrive within a month, or at first communication with the person, whichever is earlier."},
+      {dx:0,dy:28,mag:3,id:"clarity",name:"Concise, intelligible, accessible",art:"Art. 12(1)",tier:4,kind:"text",freq:"Annual",ex:["Plain-language review sign-off", "Readability score or comprehension testing results", "Translations for each market served"],
+       what:"Form matters as much as content. Information must be in clear and plain language, particularly for children, and provided free of charge. A legally complete but unreadable notice fails Art. 12.",
+       evidence:"Readability testing, plain-language review, and translations for the audiences you serve.",
+       q:"Can a privacy notice comply with Article 13 and still breach the GDPR?",
+       a:"Yes. Article 12(1) is a separate obligation about form: concise, transparent, intelligible, easily accessible, plain language. Regulators have fined organisations whose notices contained everything required but were scattered, buried or impenetrable."},
+      {dx:-14,dy:94,mag:2,id:"layered",name:"Layered & just-in-time notices",art:"Art. 12(1) · Rec. 58 · WP29 Transparency Guidelines (WP260)",tier:4,kind:"guidance",freq:"Annual, plus per product release",ex:["Screenshots of the first-layer and full notice journey", "Inventory of just-in-time prompts and where they fire", "User-testing notes on whether the first layer is understood"],
+       what:"Deliver information where the decision happens: a short first layer at the point of collection, linking to the full notice, plus contextual pop-ups for unexpected processing.",
+       evidence:"Screenshots of the notice journey at each collection point in your products.",
+       q:"What is a 'just-in-time' notice and why does it help?",
+       a:"A short contextual message shown exactly when data is collected, beside a form field, before enabling location. It closes the gap between the legal document nobody reads and the moment the person actually decides, which is what transparency is meant to protect."}
+    ]
+  },
+  {
+    id:"iura", name:"Iura", sub:"Data subject rights", cx:1180, cy:150, color:"#a78bfa",
+    lines:[[5,0],[0,1],[1,2],[2,3],[3,4],[4,5]],
+    stars:[
+      {dx:-88,dy:-48,mag:3,id:"dsar",name:"Access request procedure",art:"Art. 15(1)(a)–(h), 15(3), 15(4)",tier:4,kind:"text",freq:"Quarterly review of the procedure",ex:["Documented DSAR workflow: intake, ID verification, search scope, redaction, release", "Search coverage map naming every system queried", "Sample redaction log with the Art. 15(4) reasoning"],
+       what:"A person may ask what you hold, why, who receives it, how long you keep it and where it came from, plus a copy. The right to a copy must not adversely affect others' rights, but that is a narrow carve-out, not a general refusal.",
+       evidence:"A documented DSAR workflow with intake, identity verification, search scope, redaction rules and logs.",
+       q:"Can you refuse an access request because it would reveal another person's data?",
+       a:"Not wholesale. Article 15(4) protects the rights of others, so you redact or withhold the specific elements that would expose them, but you must still provide the rest. A blanket refusal on this ground is one of the most commonly overturned positions."},
+      {dx:12,dy:-84,mag:2,id:"erase",name:"Rectification & erasure",art:"Art. 16 · Art. 17(1)(a)–(f), 17(2), 17(3)",tier:4,kind:"text",freq:"Annual",ex:["Deletion runbook covering production, backups, logs, analytics and processors", "Evidence of downstream propagation to recipients", "Record of any Art. 17(3) exemption relied on"],
+       what:"Correct inaccurate data without undue delay, and erase where the data is no longer necessary, consent is withdrawn, the objection succeeds, or processing was unlawful. Erasure is not absolute, legal obligations and freedom of expression can defeat it.",
+       evidence:"Deletion procedures covering backups, logs, analytics and processors, with proof of downstream propagation.",
+       q:"Does the right to erasure extend to data you have shared with others?",
+       a:"Yes, Article 17(2) requires you to take reasonable steps, considering available technology and cost, to inform other controllers processing that data that the person has requested erasure of links, copies or replications."},
+      {dx:94,dy:-22,mag:2,id:"restrict",name:"Restriction & objection",art:"Art. 18(1)(a)–(d), 18(2) · Art. 21(1)–(3)",tier:4,kind:"text",freq:"Annual",ex:["Technical flag that freezes a record without deleting it", "Marketing suppression list and proof it is honoured across channels", "Log of compelling-grounds assessments where an objection was refused"],
+       what:"Restriction freezes processing while a dispute is resolved. Objection stops processing based on legitimate interests or public task unless you show compelling grounds, and for direct marketing, the objection is absolute.",
+       evidence:"Technical ability to flag and freeze records, and a suppression list for marketing objections.",
+       q:"Which objection can never be overridden?",
+       a:"Objection to direct marketing under Article 21(3). There is no balancing test and no compelling-grounds defence, processing for that purpose must stop immediately and permanently."},
+      {dx:78,dy:58,mag:2,id:"port",name:"Data portability",art:"Art. 20(1)(a)–(b), 20(2)–(4)",tier:4,kind:"text",freq:"Annual",ex:["Export function producing a documented machine-readable format", "Schema or data dictionary published with the export", "Scoping note explaining which processing falls within Art. 20"],
+       what:"Where processing rests on consent or contract and is automated, the person can receive their data in a structured, commonly used, machine-readable format, and have it transmitted directly to another controller where technically feasible.",
+       evidence:"An export function producing a documented, machine-readable format.",
+       q:"Does portability apply to data processed under legitimate interests?",
+       a:"No. Article 20 is limited to processing based on consent or on a contract, and carried out by automated means. Data processed under legitimate interests, legal obligation or public task falls outside it, a common scoping error."},
+      {dx:-18,dy:74,mag:3,id:"auto",name:"Automated decisions & profiling",art:"Art. 22(1)–(4) · Rec. 71 · Art. 13(2)(f), 14(2)(g), 15(1)(h)",tier:4,kind:"text",freq:"Semi-annual, plus per model change",ex:["Inventory of automated decisions with the Art. 22(2) exemption relied on", "Documented human-review procedure naming who can override and how", "Explanation of the logic given to individuals, with the version of the model it describes"],
+       what:"Decisions based solely on automated processing with legal or similarly significant effects are prohibited unless necessary for a contract, authorised by law, or based on explicit consent, and even then you owe human intervention, explanation and the right to contest.",
+       evidence:"An inventory of automated decisions with the exemption relied on and the human-review procedure.",
+       q:"What safeguards survive even when an Article 22 exemption applies?",
+       a:"The right to obtain human intervention, to express one's point of view, and to contest the decision. Meaningful information about the logic involved and the envisaged consequences must also be given under Arts. 13–15, the bridge between the GDPR and the AI Act."},
+      {dx:-110,dy:28,mag:2,id:"deadline",name:"One-month response clock",art:"Art. 12(3), 12(4)",tier:4,kind:"text",freq:"Quarterly",ex:["Request tracker with receipt, extension and response timestamps", "Copies of extension notices with the stated reasons", "Monthly report of on-time versus late responses"],
+       what:"Respond without undue delay and within one month of receipt. Extendable by two further months for complexity or volume, but you must tell the person within the first month and explain why.",
+       evidence:"Request tracker with receipt dates, extension notices and response timestamps.",
+       q:"When does the one-month clock start, and how far can it be extended?",
+       a:"From receipt of the request, not from identity verification, unless you have reasonable doubts and ask promptly. It can be extended by two months for complexity or number of requests, but only if you notify the person, with reasons, within the original month."}
+    ]
+  },
+  {
+    id:"memoria", name:"Memoria", sub:"Accountability & records", cx:245, cy:430, color:"#4ade80",
+    lines:[[0,1],[1,2],[2,3],[3,4],[4,0]],
+    stars:[
+      {dx:-74,dy:-58,mag:3,id:"ropa",name:"Record of processing activities",art:"Art. 30(1)(a)–(g), 30(2)(a)–(d), 30(5)",tier:2,kind:"text",freq:"Quarterly",ex:["Maintained RoPA, dated and version-controlled", "Separate processor-role record where Art. 30(2) applies", "Assessment showing why the Art. 30(5) exemption does or does not apply"],
+       what:"The backbone document: purposes, categories of individuals and data, recipients, third-country transfers, retention periods and a general description of security measures. First thing a regulator asks for.",
+       evidence:"A maintained RoPA, dated and version-controlled, for both controller and processor roles.",
+       q:"Are small organisations exempt from keeping a RoPA?",
+       a:"Rarely in practice. The under-250-employee exemption in Art. 30(5) collapses if processing is not occasional, is likely to result in a risk to rights and freedoms, or involves special categories or criminal-offence data, which covers most businesses with staff and customers."},
+      {dx:66,dy:-84,mag:2,id:"policy",name:"Governance framework",art:"Art. 24(1), 24(2)",tier:2,kind:"text",freq:"Annual",ex:["Approved policy set with named owners and review dates", "Board or management reporting pack on data protection", "Evidence that measures were reviewed and updated, not just written"],
+       what:"Implement appropriate technical and organisational measures, including data protection policies, proportionate to risk, and be able to demonstrate that processing complies.",
+       evidence:"Approved policy set, assigned ownership, review cycle and board-level reporting.",
+       q:"What does Article 24 add beyond the specific obligations elsewhere?",
+       a:"It makes compliance an organisational duty rather than a checklist: measures must be reviewed and updated where necessary, and the controller must be able to demonstrate compliance. It is the hook regulators use when a failure is systemic rather than article-specific."},
+      {dx:88,dy:28,mag:2,id:"dpo",name:"DPO appointment & independence",art:"Art. 37(1)(a)–(c), 37(5), 37(7) · Art. 38(3), 38(6)",tier:2,kind:"text",freq:"Annual",ex:["Appointment record and DPA notification confirmation", "Published DPO contact details in the notice and on the website", "Documented conflict-of-interest assessment for the role held"],
+       what:"Mandatory for public authorities, large-scale regular and systematic monitoring, or large-scale special-category processing. The DPO must report to the highest level, be free from instructions on their tasks, and face no dismissal for performing them.",
+       evidence:"Appointment record, published contact details, DPA notification, and a conflict-of-interest assessment.",
+       q:"Why can the Head of IT usually not serve as DPO?",
+       a:"Conflict of interest under Art. 38(6). A DPO cannot determine the purposes and means of processing they are meant to monitor. Senior IT, HR, marketing and legal leadership roles have all been found incompatible by supervisory authorities."},
+      {dx:2,dy:70,mag:2,id:"training",name:"Awareness & training",art:"Art. 39(1)(b)",tier:2,kind:"text",freq:"Annual, plus at onboarding",ex:["Training records with dates, completion rates and role-specific content", "Materials for high-risk roles (support, HR, marketing, engineering)", "Phishing or handling test results where used"],
+       what:"Staff who process data must know the rules that apply to them. Training is an explicit DPO task and, in enforcement practice, the first thing examined after a human-error breach.",
+       evidence:"Training records with dates, coverage and role-specific content.",
+       q:"Why does training show up in breach enforcement so often?",
+       a:"Because most breaches are human error, misdirected email, wrong attachment, lost device. Regulators treat the absence of documented, role-appropriate training as evidence that organisational measures under Arts. 24 and 32 were inadequate, which increases the fine."},
+      {dx:-98,dy:26,mag:3,id:"proof",name:"Demonstrable accountability",art:"Art. 5(2)",tier:4,kind:"text",freq:"Annual",ex:["Evidence pack tying each Art. 5(1) principle to a concrete artefact", "Decision log for judgement calls with the reasoning at the time", "Internal audit or assurance report"],
+       what:"You are responsible for the principles and must be able to demonstrate compliance. Doing the right thing without a record of it is, for enforcement purposes, close to not doing it.",
+       evidence:"An evidence pack tying each principle to concrete artefacts and decision logs.",
+       q:"Why does Article 5(2) carry the 4% fine tier rather than 2%?",
+       a:"Because accountability is part of Article 5, the principles article, which sits in the higher tier under Art. 83(5). A failure to demonstrate compliance is therefore penalised at the same level as breaching the principles themselves."}
+    ]
+  },
+  {
+    id:"praevisio", name:"Praevisio", sub:"Risk & design", cx:650, cy:430, color:"#fb923c",
+    lines:[[0,1],[1,2],[2,3],[3,4],[4,0]],
+    stars:[
+      {dx:2,dy:-74,mag:3,id:"dpia",name:"DPIA, threshold & method",art:"Art. 35(1), 35(3)(a)–(c), 35(7)(a)–(d) · national DPA blacklist",tier:2,kind:"text",freq:"Per project, before processing begins",ex:["Completed DPIA with necessity and proportionality analysis", "Risk register with likelihood, severity and residual risk", "Record of the DPO's advice under Art. 35(2)"],
+       what:"Required where processing is likely to result in a high risk: systematic extensive automated evaluation, large-scale special categories, or large-scale systematic monitoring of public areas, plus whatever your DPA's mandatory list adds.",
+       evidence:"Completed DPIAs with the necessity and proportionality analysis, risks, and mitigations.",
+       q:"What four things must a DPIA contain as a minimum?",
+       a:"A systematic description of the processing and its purposes; an assessment of necessity and proportionality; an assessment of the risks to rights and freedoms; and the measures envisaged to address those risks, including safeguards and security measures."},
+      {dx:88,dy:-12,mag:2,id:"consult",name:"Prior consultation with the DPA",art:"Art. 36(1)–(3)",tier:2,kind:"text",freq:"Per DPIA showing high residual risk",ex:["Consultation submission and the authority's response", "Or a documented rationale that mitigations brought residual risk below the threshold"],
+       what:"If the DPIA shows high residual risk that you cannot mitigate, you must consult the supervisory authority before processing. They have eight weeks, extendable by six.",
+       evidence:"Consultation records, or documented reasoning that residual risk was adequately mitigated.",
+       q:"When is prior consultation triggered?",
+       a:"Only when a DPIA indicates the processing would result in a high risk in the absence of mitigating measures, that is, high risk remains after your safeguards. If mitigations bring the risk down, you document that and proceed."},
+      {dx:58,dy:70,mag:3,id:"design",name:"Data protection by design & default",art:"Art. 25(1), 25(2)",tier:2,kind:"text",freq:"Per release",ex:["Design review gate citing Art. 25 with sign-off", "Default configuration record showing the shipped settings", "Architecture decision records referencing minimisation choices"],
+       what:"Build in safeguards at the time of determining the means, not at launch review. By default, only data necessary for each specific purpose is processed, the tightest setting is the shipped setting.",
+       evidence:"Design review gates, default configuration records, and architecture decisions citing Art. 25.",
+       q:"What does 'by default' actually require in a product?",
+       a:"That without any action by the person, the minimum amount of data is collected, the shortest retention applies, access is narrowest, and the data is not made accessible to an indefinite number of people. Privacy-protective settings must be the shipped state, not an option."},
+      {dx:-62,dy:58,mag:2,id:"minim",name:"Minimisation & retention schedule",art:"Art. 5(1)(c), 5(1)(e)",tier:4,kind:"text",freq:"Annual",ex:["Retention schedule per data category with the justification for each period", "Evidence that automated deletion runs and succeeds", "Field-level review showing what was dropped as unnecessary"],
+       what:"Adequate, relevant and limited to what is necessary; kept no longer than needed. Retention is where most organisations quietly fail, data accumulates because nobody owns deletion.",
+       evidence:"A retention schedule per data category with automated deletion and proof it executes.",
+       q:"Why is 'we might need it later' not a valid retention justification?",
+       a:"Because storage limitation requires a defined period tied to the specified purpose. Speculative future value is not a purpose. If a genuine future need exists, it must be identified, given its own lawful basis, and reflected in the notice and schedule."},
+      {dx:-88,dy:-28,mag:2,id:"dpia-review",name:"Reassess when risk changes",art:"Art. 35(11)",tier:2,kind:"text",freq:"On any change to the risk profile",ex:["Change-management triggers that require a DPIA revisit", "Dated DPIA revisions with what changed and why", "Post-incident review feeding back into the assessment"],
+       what:"A DPIA is not a one-off artefact. Review when the risk changes, new data sources, new model, new vendor, new jurisdiction, and at minimum on a defined cycle.",
+       evidence:"Review triggers documented in change management, with dated DPIA revisions.",
+       q:"What events should trigger a DPIA review?",
+       a:"Any change to the risk profile: new categories of data, a new processor or sub-processor, a change of purpose, deployment in a new country, a shift in the technology (for example introducing an AI model), or an incident revealing an unforeseen risk."}
+    ]
+  },
+  {
+    id:"vinculum", name:"Vinculum", sub:"Processors & sharing", cx:1150, cy:430, color:"#f472b6",
+    lines:[[0,1],[1,2],[2,3],[3,4],[4,0]],
+    stars:[
+      {dx:-78,dy:-42,mag:3,id:"dpa-contract",name:"Processor contract clauses",art:"Art. 28(3)(a)–(h), 28(9), 28(10)",tier:2,kind:"text",freq:"Annual, plus at contract renewal",ex:["Signed DPA for every processor, mapped to the Art. 28(3) clause checklist", "Register of controller instructions issued", "Role assessment showing the party is genuinely a processor"],
+       what:"A written contract is mandatory and its content is prescribed: subject matter, duration, nature and purpose, data types, obligations of both parties, documented instructions, confidentiality, security, sub-processing, assistance, deletion and audit rights.",
+       evidence:"Signed DPAs for every processor, mapped against the Art. 28(3) clause checklist.",
+       q:"What happens if a processor determines the purposes of processing?",
+       a:"It becomes a controller for that processing under Art. 28(10) and bears full controller liability. The label in the contract does not decide the role, the factual determination of purposes and means does."},
+      {dx:38,dy:-74,mag:2,id:"subproc",name:"Sub-processor authorisation",art:"Art. 28(2), 28(4)",tier:2,kind:"text",freq:"On every sub-processor change",ex:["Current sub-processor list with locations and services", "Notification mechanism and evidence it fires before onboarding", "Record of objections raised and how they were resolved"],
+       what:"Processors need prior specific or general written authorisation to engage sub-processors, must inform you of changes so you can object, and must flow down the same obligations, remaining fully liable for the sub-processor's failures.",
+       evidence:"An up-to-date sub-processor list, notification mechanism, and objection procedure.",
+       q:"Who is liable when a sub-processor causes a breach?",
+       a:"The original processor remains fully liable to the controller for the sub-processor's performance under Art. 28(4). That does not remove the controller's own accountability for choosing and overseeing the processor in the first place."},
+      {dx:88,dy:18,mag:2,id:"joint",name:"Joint controller arrangement",art:"Art. 26(1)–(3)",tier:2,kind:"text",freq:"Annual",ex:["Signed joint controller arrangement allocating each obligation", "The essence of the arrangement published for individuals", "Agreed single point of contact for rights requests"],
+       what:"Where two parties jointly determine purposes and means, they must agree in a transparent arrangement who does what, especially on rights handling and notice, and make the essence of it available to individuals.",
+       evidence:"A signed joint controller arrangement plus the public-facing summary.",
+       q:"Can individuals enforce their rights against either joint controller?",
+       a:"Yes. Article 26(3) lets the person exercise their rights against each controller regardless of what the arrangement says. The allocation governs the relationship between the parties, not the individual's route to a remedy."},
+      {dx:12,dy:74,mag:2,id:"diligence",name:"Processor due diligence",art:"Art. 28(1) · Art. 28(5)",tier:2,kind:"text",freq:"At onboarding, then annually",ex:["Vendor assessment record with the security questionnaire responses", "Certifications reviewed, with scope checked against the actual service", "Re-review dates and evidence the re-review happened"],
+       what:"You may only use processors providing sufficient guarantees of appropriate measures. Assessment before onboarding, and periodically thereafter, certifications and codes of conduct are evidence, not a substitute.",
+       evidence:"Vendor assessment records, security questionnaires, certifications and re-review dates.",
+       q:"Is a vendor's ISO 27001 certificate enough to satisfy Article 28(1)?",
+       a:"It is a relevant element demonstrating sufficient guarantees, expressly recognised in Art. 28(5), but not conclusive on its own. You still need to assess scope, applicability to the actual service, and the specific data protection measures beyond information security."},
+      {dx:-96,dy:32,mag:2,id:"confid",name:"Confidentiality & instructions",art:"Art. 29 · Art. 32(4) · Art. 28(3)(b)",tier:2,kind:"text",freq:"Annual",ex:["Confidentiality undertakings on file for everyone with access", "Documented instruction trail to processors", "Access-control matrix showing who can process what"],
+       what:"Anyone acting under the controller's or processor's authority processes only on documented instructions. Personnel must be bound by confidentiality obligations, contractual or statutory.",
+       evidence:"Confidentiality undertakings on file and a documented instruction trail for processors.",
+       q:"What must a processor do if it thinks an instruction breaches the GDPR?",
+       a:"Inform the controller immediately, under Art. 28(3) final paragraph. The processor is not obliged to police the controller's compliance generally, but it cannot silently execute an instruction it considers infringing."}
+    ]
+  },
+  {
+    id:"custodia", name:"Custodia", sub:"Security & breach", cx:265, cy:700, color:"#fb7185",
+    lines:[[0,1],[1,2],[2,3],[3,4],[4,0]],
+    stars:[
+      {dx:-72,dy:-48,mag:3,id:"tom",name:"Technical & organisational measures",art:"Art. 32(1)(a)–(d), 32(2), 32(3)",tier:2,kind:"text",freq:"Annual, with testing at least yearly",ex:["Control set mapped to Art. 32(1)(a)–(d)", "Penetration test reports and remediation tracking", "Restoration drill results proving availability can be restored"],
+       what:"Appropriate to the risk, considering state of the art and cost: pseudonymisation and encryption, confidentiality/integrity/availability/resilience, restoration after incident, and regular testing of effectiveness.",
+       evidence:"Security control set mapped to Art. 32, with penetration tests and restoration drills.",
+       q:"Which Article 32 requirement is most often missed?",
+       a:"Paragraph 1(d): a process for regularly testing, assessing and evaluating the effectiveness of the measures. Organisations implement controls but cannot show they verify that the controls still work, which is the part the article actually mandates."},
+      {dx:32,dy:-74,mag:2,id:"detect",name:"Breach detection & triage",art:"Art. 33(1) · EDPB Guidelines 9/2022 on breach notification",tier:2,kind:"guidance",freq:"Semi-annual tabletop exercise",ex:["Incident response plan with severity criteria and named roles", "Tabletop exercise records including timing against the 72-hour clock", "Monitoring and alerting coverage map"],
+       what:"You cannot notify within 72 hours if you cannot detect within 72 hours. Detection, escalation and a risk-assessment rubric must exist before the incident, not after.",
+       evidence:"Incident response plan with defined severity criteria, roles, and tested escalation paths.",
+       q:"When does the 72-hour clock start?",
+       a:"On becoming aware, meaning a reasonable degree of certainty that a security incident has occurred leading to personal data being compromised. A brief initial investigation period is accepted, but awareness is not deferred until the investigation concludes."},
+      {dx:92,dy:12,mag:3,id:"notify72",name:"Notify the DPA within 72 hours",art:"Art. 33(1)–(4)",tier:2,kind:"text",freq:"Annual test of the process",ex:["Pre-drafted notification template matching the DPA's portal fields", "Provisioned portal access with named submitters", "Decision log for breaches assessed as not notifiable"],
+       what:"Notify unless the breach is unlikely to result in a risk to rights and freedoms. Late notification must be accompanied by reasons for the delay. Phased notification is permitted where full facts are not yet available.",
+       evidence:"Notification templates pre-drafted, DPA portal access provisioned, decision log for non-notified breaches.",
+       q:"Do you have to notify every personal data breach?",
+       a:"No, only those likely to result in a risk to individuals' rights and freedoms. But the assessment must be documented either way under Art. 33(5); an undocumented decision not to notify is itself a finding."},
+      {dx:18,dy:70,mag:2,id:"inform",name:"Communicate to individuals",art:"Art. 34(1)–(3)(a)–(c)",tier:2,kind:"text",freq:"Annual",ex:["Communication templates in plain language, per audience", "Documented assessment against each Art. 34(3) exemption", "Contact-data readiness to actually reach affected individuals"],
+       what:"Where the breach is likely to result in a HIGH risk, tell the affected people without undue delay, in clear and plain language. Exempt if data was encrypted, if you have since neutralised the risk, or if it would take disproportionate effort.",
+       evidence:"Communication templates and a documented assessment against the Art. 34(3) exemptions.",
+       q:"What is the threshold difference between notifying the DPA and the individuals?",
+       a:"Risk versus high risk. The regulator is told where a breach is likely to result in a risk; individuals are told only where it is likely to result in a high risk to their rights and freedoms."},
+      {dx:-82,dy:44,mag:2,id:"register",name:"Internal breach register",art:"Art. 33(5)",tier:2,kind:"text",freq:"Quarterly",ex:["Breach log covering every incident, notified or not", "Facts, effects and remedial action recorded for each", "Trend analysis feeding into training and controls"],
+       what:"Document all breaches, including those you decided not to notify, with the facts, effects and remedial action taken, so the DPA can verify your judgement.",
+       evidence:"A breach log covering every incident, with the risk assessment and rationale for each decision.",
+       q:"Must you record breaches you decided not to report?",
+       a:"Yes, expressly. Article 33(5) requires documentation of any personal data breach, comprising the facts, its effects and the remedial action. That record is precisely what enables the authority to verify a decision not to notify."}
+    ]
+  },
+  {
+    id:"transitus", name:"Transitus", sub:"International transfers", cx:740, cy:700, color:"#5fd4e8",
+    lines:[[2,0],[2,1],[2,3],[2,4]],
+    stars:[
+      {dx:-84,dy:-42,mag:2,id:"adequacy",name:"Adequacy decisions",art:"Art. 45(1), 45(3), 45(4)",tier:4,kind:"text",freq:"Semi-annual, adequacy can be annulled",ex:["Transfer register naming the mechanism for each flow", "Watch list for adequacy reviews and pending litigation", "Documented fallback mechanism ready if adequacy falls"],
+       what:"Transfers to countries the Commission has found adequate need no further authorisation. Adequacy is reviewed periodically and can be annulled, as happened twice to US arrangements.",
+       evidence:"A transfer register recording which mechanism covers each flow, refreshed when adequacy changes.",
+       q:"Why is relying on an adequacy decision not a permanent solution?",
+       a:"Adequacy decisions are subject to periodic review and can be invalidated by the Court of Justice, as Safe Harbour was in Schrems I and Privacy Shield in Schrems II. Prudent programmes keep a fallback mechanism documented and ready."},
+      {dx:28,dy:-74,mag:3,id:"sccs",name:"SCCs & appropriate safeguards",art:"Art. 46(1), 46(2)(c) · Commission Decision 2021/914",tier:4,kind:"text",freq:"Annual, plus at contract change",ex:["Executed SCCs with the correct module selected per flow", "Annexes I–III completed with the actual data, purposes and measures", "Mapping from each transfer in the register to its signed clauses"],
+       what:"Standard contractual clauses, binding corporate rules, approved codes or certification. The 2021 modular SCCs must be used, with the correct module for the controller/processor configuration of each flow.",
+       evidence:"Executed SCCs with correct modules, annexes completed, and a mapping to each transfer.",
+       q:"What is the most common technical error with the 2021 SCCs?",
+       a:"Selecting the wrong module, or leaving Annexes I–III generic. The modules correspond to controller-to-controller, controller-to-processor, processor-to-processor and processor-to-controller flows, and the annexes must describe the actual data, purposes and security measures."},
+      {dx:94,dy:8,mag:3,id:"tia",name:"Transfer impact assessment",art:"CJEU C-311/18 (Schrems II) · EDPB Recommendations 01/2020",tier:4,kind:"caselaw",freq:"Annual, plus on any change in destination law",ex:["Documented TIA per destination with the government-access analysis", "Supplementary measures applied, with who holds the encryption keys", "Suspension trigger defined if the measures stop being effective"],
+       what:"Safeguards on paper are not enough. Assess whether the destination country's law, especially government access powers, undermines them, and add supplementary measures such as encryption with EU-held keys where it does.",
+       evidence:"Documented TIAs per destination, with legal analysis and the supplementary measures applied.",
+       q:"What did Schrems II add beyond signing SCCs?",
+       a:"The obligation to verify, case by case, whether the law and practice of the destination country prevents the SCCs from being effective, and to adopt supplementary technical, contractual or organisational measures, or suspend the transfer, where it does."},
+      {dx:24,dy:74,mag:2,id:"bcr",name:"Binding corporate rules",art:"Art. 47(1)(a)–(b), 47(2)(a)–(n)",tier:4,kind:"text",freq:"Annual",ex:["Approved BCRs and the approval decision", "Evidence the internal audit programme they promise actually runs", "Training records for staff covered by the rules"],
+       what:"Group-wide internal rules approved by a lead DPA through the consistency mechanism. Heavy to obtain, durable once granted, worthwhile for large multinationals with constant intragroup flows.",
+       evidence:"Approved BCRs and evidence of the internal enforcement and audit programme they promise.",
+       q:"Who approves BCRs and why does it take so long?",
+       a:"The competent lead supervisory authority, after the Art. 63 consistency mechanism involving the EDPB. The rules must be legally binding on every group entity, confer enforceable rights on individuals, and include audit, training and complaint handling, typically an 18-month-plus process."},
+      {dx:-84,dy:48,mag:2,id:"derog",name:"Derogations, exceptional use",art:"Art. 49(1)(a)–(g), 49(2), 49(6) · EDPB Guidelines 2/2018",tier:4,kind:"text",freq:"Quarterly",ex:["Log of derogation-based transfers showing volume and frequency", "Evidence they remain occasional and non-repetitive", "Documentation of the derogation in the RoPA as required by Art. 49(6)"],
+       what:"Explicit consent, contract necessity, important public interest, legal claims, vital interests. These are for occasional, non-repetitive transfers, not an architecture for routine data flows.",
+       evidence:"A log of derogation-based transfers showing they remain occasional and non-systematic.",
+       q:"Can you build a regular data flow on Article 49 derogations?",
+       a:"No. The EDPB reads Article 49 strictly: derogations are exceptions for occasional and non-repetitive transfers of a limited number of individuals. Using them for a systematic flow, routine cloud hosting, for example, is a misapplication regulators pursue."}
+    ]
+  },
+  {
+    id:"vigilantia", name:"Vigilantia", sub:"Supervision & enforcement", cx:1250, cy:700, color:"#f0c674",
+    lines:[[0,1],[1,2],[2,3],[3,4],[4,0]],
+    stars:[
+      {dx:-72,dy:-48,mag:2,id:"lead",name:"Lead authority & one-stop-shop",art:"Art. 56(1)–(6) · Art. 4(16)",tier:2,kind:"text",freq:"On any structural or decision-making change",ex:["Main-establishment analysis naming where purposes and means are decided", "Correspondence confirming the lead authority", "Map of concerned authorities for the processing"],
+       what:"For cross-border processing, the DPA of your main establishment, where decisions on purposes and means are actually taken, leads, coordinating with concerned authorities.",
+       evidence:"A documented main-establishment analysis identifying your lead authority.",
+       q:"What determines your main establishment for the one-stop-shop?",
+       a:"The place of central administration in the EU, unless decisions on the purposes and means of processing are taken in another establishment with power to implement them, in which case that one is the main establishment. It is a factual test, not a matter of where you incorporate."},
+      {dx:38,dy:-64,mag:2,id:"cooperate",name:"Cooperate with the authority",art:"Art. 31",tier:2,kind:"text",freq:"Annual",ex:["Regulator-engagement protocol with a named owner", "Log of authority requests and response times", "Evidence-gathering procedure that can be executed at short notice"],
+       what:"Controllers and processors must cooperate with the supervisory authority on request. Obstruction and incomplete responses are aggravating factors under Art. 83(2).",
+       evidence:"A regulator-engagement protocol with a named owner and evidence-gathering procedure.",
+       q:"How does cooperation affect the size of a fine?",
+       a:"Article 83(2)(f) makes the degree of cooperation with the supervisory authority to remedy the infringement and mitigate its effects an express factor. Prompt, complete, self-critical engagement demonstrably reduces fines; defensiveness increases them."},
+      {dx:84,dy:22,mag:2,id:"complaints",name:"Complaints & judicial remedies",art:"Art. 77(1) · Art. 78 · Art. 79 · Art. 82(1)–(3)",tier:4,kind:"text",freq:"Annual",ex:["Complaints log with outcome and root-cause analysis", "Evidence that root causes fed back into controls", "Register of compensation claims and their disposition"],
+       what:"Individuals can complain to a DPA, seek judicial remedy against the authority, and sue the controller or processor directly, plus claim compensation for material and non-material damage under Art. 82.",
+       evidence:"A complaints log with root-cause analysis feeding back into the programme.",
+       q:"Can someone claim compensation for distress alone, with no financial loss?",
+       a:"Yes, Article 82 covers non-material damage. The Court of Justice has confirmed there is no de minimis threshold, but the person must still prove actual damage; a mere infringement of the GDPR does not by itself create an entitlement."},
+      {dx:8,dy:74,mag:3,id:"fines",name:"Fine exposure & mitigation",art:"Art. 83(1)–(6) · EDPB Guidelines 04/2022 on fine calculation",tier:4,kind:"text",freq:"Annual",ex:["Risk register mapping high-exposure activities to their tier", "Turnover figures at undertaking level, not entity level", "Record of mitigating factors under Art. 83(2)"],
+       what:"Two tiers, 2% or 4% of total worldwide annual turnover, whichever is higher than the fixed ceiling. Eleven factors shape the amount: nature, gravity, duration, intent, mitigation, prior infringements, cooperation and more.",
+       evidence:"A risk register mapping your highest-exposure activities to their tier and mitigating factors.",
+       q:"Is turnover measured at company or group level?",
+       a:"At undertaking level, applying the competition-law concept, meaning the whole economic group, not just the entity that infringed. This is why a subsidiary's breach can be priced against a parent's global revenue."},
+      {dx:-82,dy:38,mag:2,id:"rep",name:"EU representative",art:"Art. 27(1)–(5) · Art. 3(2)",tier:2,kind:"text",freq:"Annual",ex:["Written mandate appointing the representative", "Representative details published in the privacy notice", "Assessment of whether the Art. 27(2) exemption applies"],
+       what:"Controllers and processors outside the EU offering goods or services to, or monitoring, people in the EU must designate a written representative in a Member State where those individuals are, unless a narrow exemption applies.",
+       evidence:"Written mandate appointing the representative, with details published in the privacy notice.",
+       q:"Who can be held accountable when a non-EU company has no representative?",
+       a:"The absence is itself an infringement of Art. 27, and it has been the standalone basis for enforcement. The representative can also be addressed by authorities and individuals in addition to, not instead of, the controller."}
+    ]
+  }
+];
+
+/* ============================================ STATE ============================================ */
+const KINDS = {
+  text:{label:"Regulation text", note:"An express requirement in the articles cited."},
+  caselaw:{label:"CJEU case law", note:"Established by the Court of Justice, not by the text alone."},
+  guidance:{label:"Supervisory guidance", note:"A structured practice expected by the EDPB, derived from a recital or a general duty rather than stated as a discrete requirement."}
+};
+const STATES = {
+  none:{label:"Not started", w:0},
+  wip:{label:"In progress", w:0.5},
+  done:{label:"Implemented", w:1},
+  na:{label:"Not applicable", w:null}
+};
+const ALL = [];
+CONSTELLATIONS.forEach(c=>c.stars.forEach((s,i)=>{
+  s.const=c; s.idx=i; s.x=c.cx+s.dx; s.y=c.cy+s.dy; s.state="none"; s.seen=false; s.known=false; s.owner="";
+  ALL.push(s);
+}));
+
+const KEY="gdpr-constellation-v1";
+function load(){
+  try{
+    const raw=localStorage.getItem(KEY); if(!raw) return;
+    const d=JSON.parse(raw);
+    ALL.forEach(s=>{ if(d[s.id]){ s.state=d[s.id].st||"none"; s.seen=!!d[s.id].sn; s.known=!!d[s.id].kn; s.owner=d[s.id].ow||""; } });
+  }catch(e){}
+}
+function save(){
+  try{
+    const d={}; ALL.forEach(s=>d[s.id]={st:s.state,sn:s.seen,kn:s.known,ow:s.owner});
+    localStorage.setItem(KEY,JSON.stringify(d));
+  }catch(e){}
+}
+load();
+
+let selected=null, studyMode=false, fmt="md";
+
+/* ============================================ SKY ============================================ */
+const NS="http://www.w3.org/2000/svg";
+const sky=document.getElementById("sky");
+const VW=1460, VH=870;
+sky.setAttribute("viewBox",`0 0 ${VW} ${VH}`);
+sky.setAttribute("preserveAspectRatio","xMidYMid meet");
+
+const defs=document.createElementNS(NS,"defs");
+defs.innerHTML=`<radialGradient id="gl"><stop offset="0%" stop-color="#fff8e6" stop-opacity=".85"/><stop offset="100%" stop-color="#fff8e6" stop-opacity="0"/></radialGradient>`;
+sky.appendChild(defs);
+
+/* background starfield */
+const bg=document.createElementNS(NS,"g");
+sky.appendChild(bg);
+for(let i=0;i<300;i++){
+  const c=document.createElementNS(NS,"circle");
+  c.setAttribute("class","bgstar");
+  c.setAttribute("cx",(Math.random()*VW).toFixed(1));
+  c.setAttribute("cy",(Math.random()*VH).toFixed(1));
+  c.setAttribute("r",(Math.random()*0.9+0.25).toFixed(2));
+  const dur=(2.5+Math.random()*5).toFixed(1), del=(Math.random()*6).toFixed(1);
+  c.setAttribute("style",`animation:tw ${dur}s ${del}s infinite ease-in-out;opacity:.3`);
+  bg.appendChild(c);
+}
+
+/* zoomable viewport */
+const vp=document.createElementNS(NS,"g");
+sky.appendChild(vp);
+
+/* constellations */
+CONSTELLATIONS.forEach(c=>{
+  const g=document.createElementNS(NS,"g");
+  g.setAttribute("class","cgroup"); c.el=g;
+  c.lines.forEach(([a,b])=>{
+    const l=document.createElementNS(NS,"line");
+    l.setAttribute("class","cline");
+    l.setAttribute("x1",c.stars[a].x); l.setAttribute("y1",c.stars[a].y);
+    l.setAttribute("x2",c.stars[b].x); l.setAttribute("y2",c.stars[b].y);
+    g.appendChild(l);
+  });
+  const nm=document.createElementNS(NS,"text");
+  nm.setAttribute("class","cname"); nm.setAttribute("x",c.cx); nm.setAttribute("y",c.cy-126);
+  nm.setAttribute("text-anchor","middle"); nm.textContent=c.name;
+  g.appendChild(nm); c.nameEl=nm;
+  const sb=document.createElementNS(NS,"text");
+  sb.setAttribute("class","csub"); sb.setAttribute("x",c.cx); sb.setAttribute("y",c.cy-111);
+  sb.setAttribute("text-anchor","middle"); sb.textContent=c.sub.toUpperCase();
+  g.appendChild(sb);
+
+  c.stars.forEach(s=>{
+    const sg=document.createElementNS(NS,"g");
+    sg.setAttribute("class","star-g");
+    const glow=document.createElementNS(NS,"circle");
+    glow.setAttribute("cx",s.x); glow.setAttribute("cy",s.y);
+    glow.setAttribute("r",s.mag*7.5+11); glow.setAttribute("fill","url(#gl)");
+    glow.setAttribute("class","star-glow");
+    sg.appendChild(glow);
+    const core=document.createElementNS(NS,"circle");
+    core.setAttribute("cx",s.x); core.setAttribute("cy",s.y);
+    core.setAttribute("r",s.mag*2.3+2.6); core.setAttribute("class","star-core");
+    sg.appendChild(core);
+    const hit=document.createElementNS(NS,"circle");
+    hit.setAttribute("cx",s.x); hit.setAttribute("cy",s.y);
+    hit.setAttribute("r",18); hit.setAttribute("class","star-hit");
+    sg.appendChild(hit);
+    const t=document.createElementNS(NS,"text");
+    t.setAttribute("class","star-lbl"); t.setAttribute("x",s.x); t.setAttribute("y",s.y+(s.mag*2.3+19));
+    t.setAttribute("text-anchor","middle");
+    t.textContent = s.name.length>32 ? s.name.slice(0,30)+"…" : s.name;
+    sg.appendChild(t);
+    g.appendChild(sg);
+    s.el=sg;
+    sg.addEventListener("click",e=>{e.stopPropagation();select(s)});
+  });
+  vp.appendChild(g);
+});
+
+function paintStars(){
+  ALL.forEach(s=>{
+    s.el.setAttribute("class",`star-g st-${s.state}${selected===s?" sel":""}`);
+  });
+  CONSTELLATIONS.forEach(c=>{
+    c.el.classList.toggle("active", !!selected && selected.const===c);
+  });
+}
+
+/* ============================================ ZOOM & PAN ============================================ */
+let zs=1, zo={x:0,y:0};
+function applyZ(){
+  vp.setAttribute("transform",`translate(${zo.x},${zo.y}) scale(${zs})`);
+  const l=document.getElementById("zlevel");
+  l.textContent=Math.round(zs*100)+"%";
+  l.classList.add("show");
+  clearTimeout(applyZ._t); applyZ._t=setTimeout(()=>l.classList.remove("show"),1100);
+}
+function skyPoint(e){
+  const p=sky.createSVGPoint(); p.x=e.clientX; p.y=e.clientY;
+  return p.matrixTransform(sky.getScreenCTM().inverse());
+}
+function zoomBy(f,ax,ay){
+  const ns=Math.max(.55,Math.min(4.5,zs*f));
+  const k=ns/zs;
+  if(ax===undefined){ ax=VW/2; ay=VH/2; }
+  zo.x = ax - k*(ax - zo.x);
+  zo.y = ay - k*(ay - zo.y);
+  zs=ns; applyZ();
+}
+sky.addEventListener("wheel",e=>{
+  e.preventDefault();
+  const p=skyPoint(e);
+  zoomBy(e.deltaY<0?1.13:0.885, p.x, p.y);
+},{passive:false});
+let moved=false;
+sky.addEventListener("mousedown",e=>{
+  if(e.target.closest(".star-g")) return;
+  moved=false;
+  const s={x:e.clientX,y:e.clientY}, o={x:zo.x,y:zo.y};
+  const ctm=sky.getScreenCTM();
+  const sx=VW/sky.getBoundingClientRect().width, sy=VH/sky.getBoundingClientRect().height;
+  sky.classList.add("panning");
+  const mv=ev=>{
+    const dx=(ev.clientX-s.x), dy=(ev.clientY-s.y);
+    if(Math.abs(dx)+Math.abs(dy)>3) moved=true;
+    zo.x=o.x+dx*sx; zo.y=o.y+dy*sy; applyZ();
+  };
+  const up=()=>{sky.classList.remove("panning");
+    window.removeEventListener("mousemove",mv);window.removeEventListener("mouseup",up)};
+  window.addEventListener("mousemove",mv); window.addEventListener("mouseup",up);
+});
+document.getElementById("z-in").onclick=()=>zoomBy(1.28);
+document.getElementById("z-out").onclick=()=>zoomBy(0.78);
+document.getElementById("z-fit").onclick=()=>{zs=1;zo={x:0,y:0};applyZ()};
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="TEXTAREA"||e.target.tagName==="INPUT") return;
+  if(e.key==="+"||e.key==="=") zoomBy(1.28);
+  if(e.key==="-"||e.key==="_") zoomBy(0.78);
+  if(e.key==="0") {zs=1;zo={x:0,y:0};applyZ();}
+});
+function focusOn(s){
+  zs=Math.max(zs,1.9);
+  zo.x = VW/2 - s.x*zs; zo.y = VH/2 - s.y*zs;
+  applyZ();
+}
+sky.addEventListener("click",e=>{ if(!moved && !e.target.closest(".star-g")) deselect(); });
+
+/* ============================================ SCORING ============================================ */
+function constScore(c){
+  const apply=c.stars.filter(s=>s.state!=="na");
+  if(!apply.length) return null;
+  const sum=apply.reduce((a,s)=>a+STATES[s.state].w,0);
+  return sum/apply.length;
+}
+function updateScore(){
+  const apply=ALL.filter(s=>s.state!=="na");
+  const assessed=ALL.filter(s=>s.state!=="none");
+  const pct = apply.length ? Math.round(apply.reduce((a,s)=>a+STATES[s.state].w,0)/apply.length*100) : 0;
+  document.getElementById("ring-val").textContent=pct+"%";
+  const circ=2*Math.PI*18;
+  document.getElementById("ring-arc").setAttribute("stroke-dasharray",circ);
+  document.getElementById("ring-arc").setAttribute("stroke-dashoffset",circ*(1-pct/100));
+  const done=ALL.filter(s=>s.state==="done").length, wip=ALL.filter(s=>s.state==="wip").length,
+        na=ALL.filter(s=>s.state==="na").length;
+  document.getElementById("score-detail").textContent =
+    assessed.length ? `${done} implemented · ${wip} in progress · ${apply.length-done-wip} open · ${na} n/a`
+                    : "nothing assessed yet";
+
+  const cs=document.getElementById("constscores"); cs.innerHTML="";
+  CONSTELLATIONS.forEach(c=>{
+    const v=constScore(c);
+    const p=v===null?"-":Math.round(v*100)+"%";
+    const el=document.createElement("span");
+    el.className="pill";
+    el.style.cursor="pointer";
+    el.style.borderColor=v===null?"":(v>=.8?"rgba(74,222,128,.45)":v>=.4?"rgba(240,198,116,.45)":"rgba(251,113,133,.4)");
+    el.innerHTML=`<span style="color:${c.color}">◆</span> ${c.name} ${p}`;
+    el.onclick=()=>{const t=c.stars.find(s=>s.state!=="done")||c.stars[0];select(t);focusOn(t);};
+    cs.appendChild(el);
+  });
+
+  const gaps=ALL.filter(s=>s.tier===4 && s.state!=="done" && s.state!=="na");
+  const cr=document.getElementById("crit");
+  cr.textContent = gaps.length ? `⚠ ${gaps.length} open obligations in the 4% fine tier` : "✓ no open 4% tier obligations";
+  cr.classList.toggle("ok", gaps.length===0);
+}
+
+/* ============================================ PANEL ============================================ */
+function select(s){
+  selected=s; paintStars(); updateScore();
+  const tierTxt = s.tier===4?T4:T2;
+  const quizHtml = studyMode ? `
+    <div class="pblock"><h4>Recall check</h4>
+      <div class="quiz" id="quiz">
+        <p class="q">${s.q}</p>
+        <p class="a">${s.a}</p>
+        <div class="row">
+          <button class="btn" id="q-reveal">Reveal answer</button>
+        </div>
+        <div class="qstat" id="qstat"></div>
+      </div>
+    </div>` : "";
+
+  document.getElementById("pbody").innerHTML=`
+    <div class="pconst">${s.const.name} · ${s.const.sub}</div>
+    <h3>${s.name}</h3>
+    <div class="pmeta">
+      <span class="pill art">${s.art}</span>
+      <span class="pill kind-${s.kind}">${KINDS[s.kind].label}</span>
+      <span class="pill t${s.tier}">${s.tier}% max tier</span>
+    </div>
+    ${quizHtml}
+    <div class="pblock"><h4>What the obligation requires</h4><p>${s.what}</p></div>
+    <div class="pblock"><h4>Evidence you must be able to show</h4><div class="evidence">${s.evidence}</div></div>
+    <div class="pblock"><h4>Evidence examples</h4><ul class="exlist">${s.ex.map(e=>`<li>${e}</li>`).join("")}</ul></div>
+    <div class="pblock"><h4>Statutory maximum · Art. 83</h4>
+      <div class="tierbox t${s.tier}">
+        <div class="cap">${s.tier}% tier</div>
+        <div style="font-size:11.5px;line-height:1.55;color:var(--ink-2)">${tierTxt}</div>
+        <p class="caveat">This is the ceiling Art. 83(${s.tier===4?5:4}) assigns to this category of infringement, not an estimate of any fine. Actual amounts are set case by case under the Art. 83(2) criteria.</p>
+      </div>
+    </div>
+    <div class="pblock"><h4>Source of the obligation</h4>
+      <p style="font-size:11.5px;line-height:1.55">${KINDS[s.kind].note}</p>
+    </div>
+    <div class="pblock"><h4>Operational</h4>
+      <div class="opfields">
+        <div class="opfield"><label>Suggested review frequency</label><div class="ro">${s.freq}</div></div>
+        <div class="opfield"><label>Owner</label><input id="ownerfield" type="text" placeholder="Who is accountable for this?" value="${(s.owner||"").replace(/"/g,"&quot;")}"></div>
+      </div>
+    </div>
+    <div class="pblock"><h4>Your status</h4>
+      <div class="states">
+        ${Object.entries(STATES).map(([k,v])=>
+          `<button class="sbtn ${s.state===k?"on":""}" data-s="${k}">${v.label}</button>`).join("")}
+      </div>
+    </div>
+    <a class="psrc" href="https://gdpr-info.eu/" target="_blank" rel="noopener">↗ Read the article text</a>`;
+
+  document.querySelectorAll(".sbtn").forEach(b=>b.onclick=()=>{
+    s.state=b.dataset.s; save(); select(s);
+  });
+  const of_=document.getElementById("ownerfield");
+  if(of_) of_.oninput=()=>{ s.owner=of_.value; save(); };
+  if(studyMode){
+    s.seen=true; save();
+    const box=document.getElementById("quiz");
+    const st=document.getElementById("qstat");
+    const seen=ALL.filter(x=>x.seen).length, known=ALL.filter(x=>x.known).length;
+    st.textContent=`reviewed ${seen}/${ALL.length} · confident on ${known}`;
+    document.getElementById("q-reveal").onclick=function(){
+      box.classList.add("revealed");
+      this.parentNode.innerHTML=
+        `<button class="btn" id="q-yes">✓ I knew this</button><button class="btn" id="q-no">↻ Review again</button>`;
+      document.getElementById("q-yes").onclick=()=>{s.known=true;save();select(s)};
+      document.getElementById("q-no").onclick=()=>{s.known=false;save();select(s)};
+    };
+  }
+  document.getElementById("panel").classList.add("open");
+}
+function deselect(){ selected=null; paintStars(); document.getElementById("panel").classList.remove("open"); }
+document.getElementById("pclose").onclick=deselect;
+
+/* ============================================ CONTROLS ============================================ */
+document.getElementById("btn-study").onclick=function(){
+  studyMode=!studyMode; this.classList.toggle("on",studyMode);
+  this.textContent=studyMode?"◉ Study mode ON":"◐ Study mode";
+  if(selected) select(selected);
+};
+document.getElementById("btn-reset").onclick=()=>{
+  if(!confirm("Clear your self-assessment and study progress?")) return;
+  ALL.forEach(s=>{s.state="none";s.seen=false;s.known=false;s.owner=""});
+  save(); deselect(); paintStars(); updateScore();
+};
+
+/* ============================================ REPORT ============================================ */
+function buildReport(kind){
+  const gaps=ALL.filter(s=>s.state!=="done"&&s.state!=="na")
+    .sort((a,b)=> b.tier-a.tier || a.const.name.localeCompare(b.const.name));
+  const done=ALL.filter(s=>s.state==="done").length;
+  const apply=ALL.filter(s=>s.state!=="na");
+  const pct=apply.length?Math.round(apply.reduce((a,s)=>a+STATES[s.state].w,0)/apply.length*100):0;
+  const today=new Date().toISOString().slice(0,10);
+
+  if(kind==="csv"){
+    const esc=v=>`"${String(v).replace(/"/g,'""')}"`;
+    const rows=[["area","obligation","citation","source_of_obligation","statutory_max_tier","status","owner","suggested_review_frequency","what_is_required","evidence_required","evidence_examples"].join(",")];
+    ALL.forEach(s=>rows.push([
+      s.const.name+", "+s.const.sub, s.name, s.art, KINDS[s.kind].label, s.tier+"% (Art. 83 ceiling, not an estimate)",
+      STATES[s.state].label, s.owner||"", s.freq, s.what, s.evidence, s.ex.join(" | ")
+    ].map(esc).join(",")));
+    return rows.join("\n");
+  }
+
+  let md=`# GDPR compliance gap report\n\n`;
+  md+=`**Generated:** ${today}  \n**Overall maturity:** ${pct}%  \n`;
+  md+=`**Implemented:** ${done} of ${apply.length} applicable obligations  \n`;
+  md+=`**Open obligations in the 4% statutory maximum tier:** ${gaps.filter(g=>g.tier===4).length}\n\n`;
+  md+=`> **How to read the tiers.** 2% and 4% are the statutory *maximum* categories assigned by\n`;
+  md+=`> Art. 83(4) and 83(5) to each type of infringement. They are **not estimates of any fine** -\n`;
+  md+=`> actual amounts are set case by case under the eleven Art. 83(2) criteria. The tier is used here\n`;
+  md+=`> only to prioritise remediation.\n\n`;
+  md+=`> **Source of each obligation.** Items are tagged *Regulation text* (an express requirement in the\n`;
+  md+=`> articles cited), *CJEU case law* (established by the Court), or *Supervisory guidance* (a structured\n`;
+  md+=`> practice expected by the EDPB, derived from a recital or a general duty). Guidance-derived items are\n`;
+  md+=`> what regulators look for, but they are not express articles and should not be presented as such.\n\n---\n\n`;
+
+  md+=`## Maturity by area\n\n| Area | Focus | Maturity | Open 4% items |\n|---|---|---|---|\n`;
+  CONSTELLATIONS.forEach(c=>{
+    const v=constScore(c);
+    const o=c.stars.filter(s=>s.tier===4&&s.state!=="done"&&s.state!=="na").length;
+    md+=`| ${c.name} | ${c.sub} | ${v===null?"n/a":Math.round(v*100)+"%"} | ${o} |\n`;
+  });
+
+  md+=`\n---\n\n## Priority gaps\n\nOrdered by fine exposure. Items in the 4% tier attract up to €20m or 4% of global annual turnover under Art. 83(5).\n\n`;
+  if(!gaps.length) md+=`_No open obligations. Every applicable item is marked as implemented._\n`;
+  [4,2].forEach(t=>{
+    const g=gaps.filter(x=>x.tier===t); if(!g.length) return;
+    md+=`### ${t}% fine tier: ${g.length} open\n\n`;
+    g.forEach(s=>{
+      md+=`**${s.name}** · ${s.art}  \n`;
+      md+=`_Status:_ ${STATES[s.state].label} · _Source:_ ${KINDS[s.kind].label}`;
+      md+=`${s.owner?` · _Owner:_ ${s.owner}`:""} · _Review:_ ${s.freq}  \n\n`;
+      md+=`${s.what}\n\n`;
+      md+=`> **Evidence required:** ${s.evidence}\n>\n`;
+      md+=s.ex.map(e=>`> - ${e}`).join("\n")+`\n\n`;
+    });
+  });
+  md+=`\n---\n\n## Method and limitations\n\n`;
+  md+=`Citations reference the specific provision down to paragraph and sub-paragraph where one exists, plus\n`;
+  md+=`the relevant recital or guidance document. This report reflects a self-assessment and has not been\n`;
+  md+=`independently verified.\n\n`;
+  md+=`**This is not legal advice.** Verify against the consolidated text on EUR-Lex and current EDPB\n`;
+  md+=`guidance before relying on anything here, guidance is revised, and amendments to the GDPR are\n`;
+  md+=`under negotiation in the Digital Omnibus.\n\n`;
+  md+=`_AI-assisted. Curated from Regulation (EU) 2016/679 and supervisory guidance._  \n`;
+  md+=`_Prepared by Fernanda S. Villa._\n`;
+  return md;
+}
+function openModal(){
+  document.getElementById("modal-text").value=buildReport(fmt);
+  document.getElementById("modal").classList.add("on");
+}
+document.getElementById("btn-about").onclick=()=>document.getElementById("about").classList.add("on");
+document.getElementById("about-close").onclick=()=>document.getElementById("about").classList.remove("on");
+document.getElementById("about").onclick=e=>{ if(e.target.id==="about") document.getElementById("about").classList.remove("on"); };
+document.getElementById("btn-report").onclick=openModal;
+document.getElementById("m-close").onclick=()=>document.getElementById("modal").classList.remove("on");
+document.getElementById("fmt-md").onclick=function(){fmt="md";this.classList.add("on");document.getElementById("fmt-csv").classList.remove("on");openModal()};
+document.getElementById("fmt-csv").onclick=function(){fmt="csv";this.classList.add("on");document.getElementById("fmt-md").classList.remove("on");openModal()};
+document.getElementById("m-copy").onclick=function(){
+  const ta=document.getElementById("modal-text"); ta.select();
+  try{document.execCommand("copy");this.textContent="✓ Copied";setTimeout(()=>this.textContent="Copy",1500)}catch(e){this.textContent="Select manually"}
+};
+document.getElementById("m-dl").onclick=function(){
+  try{
+    const blob=new Blob([buildReport(fmt)],{type:"text/plain;charset=utf-8"});
+    const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+    a.download=`gdpr-gap-report.${fmt==="csv"?"csv":"md"}`;
+    document.body.appendChild(a); a.click(); a.remove();
+  }catch(e){this.textContent="Use Copy instead"}
+};
+
+/* ============================================ GO ============================================ */
+paintStars(); updateScore();
+document.getElementById("foot").textContent =
+  `${ALL.length} obligations across ${CONSTELLATIONS.length} constellations · AI-assisted · curated from Regulation (EU) 2016/679 and supervisory guidance · not legal advice, verify before relying on it · made by Fernanda S. Villa, August 2026`;
+})();
+</script>
+</body>
+</html>
