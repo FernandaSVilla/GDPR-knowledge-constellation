@@ -103,8 +103,10 @@ AI-assisted. Made by **Fernanda S. Villa**, August 2026.
 
 This work is archived on Zenodo and has a permanent DOI.
 
-> Villa, F. S. (2026). *The GDPR Constellation: a compliance star map* (Version 1.0.0)
-> [Software]. Zenodo. https://doi.org/10.5281/zenodo.XXXXXXX
+> Sánchez-Villa, M. F. (2026). *The GDPR Constellation: a compliance star map*
+> (Version 1.0.0) [Software]. Zenodo. https://doi.org/10.5281/zenodo.21872518
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21872518.svg)](https://doi.org/10.5281/zenodo.21872518)
 
 A `CITATION.cff` file is included, so GitHub shows a **Cite this repository** button in
 the sidebar with the citation preformatted in APA and BibTeX.
