@@ -4,7 +4,7 @@ A night-sky reading of what the GDPR actually asks an organisation to do. Forty-
 practical obligations arranged as nine constellations, where every star starts dark and
 lights up as you implement it. The unlit regions are your gaps, visible before you read
 a word.
-
+ 
 **Live → [fernandasvilla.github.io/GDPR-knowledge-constellation](https://fernandasvilla.github.io/GDPR-knowledge-constellation/)**
 
 ---
