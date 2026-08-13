@@ -6,7 +6,7 @@ lights up as you implement it. The unlit regions are your gaps, visible before y
 a word.
  
 **Live → [fernandasvilla.github.io/GDPR-knowledge-constellation](https://fernandasvilla.github.io/GDPR-knowledge-constellation/)**
-
+ 
 ---
 
 ## Why constellations
